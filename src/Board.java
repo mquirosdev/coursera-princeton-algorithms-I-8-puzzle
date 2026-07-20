@@ -1,10 +1,15 @@
+import java.util.ArrayList;
+
 public class Board {
     private final int dimension;
     private final int[][] grid;
 
     public Board(int[][] tiles) {
-        this.grid = tiles;
-        this.dimension = tiles.length;
+        dimension = tiles.length;
+
+        int[][] grid = new int[dimension][dimension];
+        for(int i = 0; i < dimension; i++) grid[i] = tiles[i].clone();
+        this.grid = grid;
     }
 
     public String toString() {
@@ -76,6 +81,40 @@ public class Board {
         return true;
     }
 
+    public Iterable<Board> neighbors() {
+        ArrayList<Board> boards = new ArrayList<Board>();
+
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                if (grid[i][j] == 0) {
+                    computeMovesFromCell(boards, i, j);
+                }
+            }
+        }
+
+        return boards;
+    }
+
+    private void computeMovesFromCell(ArrayList<Board> boards, int y, int x) {
+        int[][] deltas = { { -1, 0 },  { 1, 0 }, { 0, -1 }, { 0 , 1 } };
+
+        for (int[] delta : deltas) {
+            int dy = delta[0];
+            int dx = delta[1];
+
+            int i = y + dy;
+            int j = x + dx;
+
+            if (i >= 0 && i < dimension && j >= 0 && j < dimension) {
+               Board board = new Board(this.grid);
+               int tmp = board.grid[y][x];
+               board.grid[y][x] = board.grid[i][j];
+               board.grid[i][j] = tmp;
+               boards.add(board);
+            }
+        }
+    }
+
     private int lastLinearIndex() {
         return (dimension * dimension) - 1;
     }
@@ -96,7 +135,10 @@ public class Board {
 
         Board board1 = new Board(tiles1);
         Board board2 = new Board(tiles2);
-        System.out.println(board1.equals(board2));
+        System.out.println(board1);
+        for(Board b : board1.neighbors()) {
+            System.out.println(b);
+        }
 //        System.out.println(board1);
 //        System.out.println(board1.hamming());
 //        System.out.println(board1.manhattan());
