@@ -95,6 +95,10 @@ public class Board {
         return boards;
     }
 
+    public Board twin() {
+        return this;
+    }
+
     private void computeMovesFromCell(ArrayList<Board> boards, int y, int x) {
         int[][] deltas = { { -1, 0 },  { 1, 0 }, { 0, -1 }, { 0 , 1 } };
 
