@@ -61,21 +61,44 @@ public class Board {
         return hamming() == 0;
     }
 
+    public boolean equals(Object y) {
+        if (y.getClass() != this.getClass()) return false;
+        Board that = (Board) y;
+
+        if (that.dimension != dimension) return false;
+
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                if (grid[i][j] != that.grid[i][j]) return false;
+            }
+        }
+
+        return true;
+    }
+
     private int lastLinearIndex() {
         return (dimension * dimension) - 1;
     }
 
     public static void main(String[] args) {
         // previousBoard: null, heuristic
-        int[][] tiles = {
+        int[][] tiles1 = {
                 { 8, 1, 3 },
                 { 4, 0, 2 },
                 { 7, 6, 5 }
         };
 
-        Board board = new Board(tiles);
-        System.out.println(board);
-        System.out.println(board.hamming());
-        System.out.println(board.manhattan());
+        int[][] tiles2 = {
+                { 8, 0, 3 },
+                { 4, 1, 2 },
+                { 7, 6, 5 }
+        };
+
+        Board board1 = new Board(tiles1);
+        Board board2 = new Board(tiles2);
+        System.out.println(board1.equals(board2));
+//        System.out.println(board1);
+//        System.out.println(board1.hamming());
+//        System.out.println(board1.manhattan());
     }
 }
